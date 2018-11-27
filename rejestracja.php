@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="style.css" type="text/css"/>
 	<link rel="stylesheet" href="css/fontello.css" type="text/css"/>
 	<link href="https://fonts.googleapis.com/css?family=Lato:400,700&amp;subset=latin-ext" rel="stylesheet">
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 	
 </head>
 
@@ -65,6 +66,11 @@
 									<label class="control-label col-sm-3" for="passwordd">Hasło:</label>
 									<div class="col-sm-9"> 
 										<input type="password" class="form-control" id="password" placeholder="Podaj hasło">
+									</div>
+								</div>
+								
+								<div class="col-sm-offset-1 col-sm-11">
+									<div class="g-recaptcha" data-sitekey="6Lc8028UAAAAAFQCzQEqlfLdnLK5fwfNXgwzBvsB">
 									</div>
 								</div>
 	  

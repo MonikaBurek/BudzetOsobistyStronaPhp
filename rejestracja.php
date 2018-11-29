@@ -1,3 +1,128 @@
+<?php
+
+	session_start();
+	
+	if( isset($_POST['email']))
+	{
+		//Successful validation
+		$allGood = true;
+		
+		//Validate your name
+		$name = $_POST['name'];
+		
+		$regularExpressionName = '/^[a-zA-ZŁŚĆŹŻĄĘÓŃąęółśżźćń]+$/';
+  
+		if(preg_match($regularExpressionName, $name)==0)
+		{
+			$allGood = false;
+			$_SESSION['errorName']="Imie może składać się tylko z liter!";
+		}
+		
+		
+		// $name = ucwords(strtolower($name));  // Format: Name
+		
+		//Validate email
+		$email = $_POST['email'];
+		$secureEmail = filter_var($email,FILTER_SANITIZE_EMAIL);
+		
+		if((filter_var($secureEmail,FILTER_VALIDATE_EMAIL)==false) || 
+		($secureEmail != $email))
+		{
+			$allGood = false;
+			$_SESSION['errorEmail']="Niepoprawny adres e-mail";
+		}
+		
+		//Validate password
+		$password = $_POST['password'];
+		
+		//Check password length
+		if((strlen($password) < 8) || (strlen($password) > 20))
+		{
+			$allGood = false;
+			$_SESSION['errorPassword']="Hasło musi posiadaćod 8 do 20 znaków!";
+		}
+		
+		//Password hashing
+		$passwordHash = password_hash($password, PASSWORD_DEFAULT);
+		
+		//validate re-catcha
+		$secretKey = "6Lc8028UAAAAAHLJLMyx45qS2yCNvsWhHl3ens9f";
+		
+		$check = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$_POST['g-recaptcha-response']);
+		
+		$answer = json_decode($check);
+		
+		if ($answer->success==false)
+		{
+			$allGood = false;
+			$_SESSION['errorBot']="Potwierdź, że nie jesteś botem!";
+		}	
+
+		//Remember entered data
+		$_SESSION['formName']=$name;
+		$_SESSION['formEmail']=$email;
+		$_SESSION['formPassword']=$password;
+
+		//Connect database
+		require_once "connect.php";
+		mysqli_report(MYSQLI_REPORT_STRICT);
+		
+		try
+		{
+			$connection = new mysqli($host, $db_user, $db_password, $db_name);
+			if ($connection->connect_errno!=0)
+			{
+				throw new Exception(mysqli_connect_errno());
+			}
+			else
+			{
+				//whether mail already exists
+				$resultOfQuery=$connection->query("SELECT id FROM users WHERE email='$email'");
+				
+				if(!$resultOfQuery) throw new Exception($connection->error);
+				
+				$howEmails=$resultOfQuery->num_rows;
+				if($howEmails>0)
+				{
+					$allGood = false;
+					$_SESSION['errorEmail']="Istnieje już konto dla podanego adresu mailowego.";
+				}
+				
+				//All Good
+				if ($allGood==true)
+				{
+					//Adding a user to the database
+					if ($connection->query("INSERT INTO users VALUES 
+					(NULL, '$name','$passwordHash','$email')"))
+					{
+						$_SESSION['successfulRegistration']=true;
+						header('Location: stronaglowna.php');
+					}
+					else
+					{
+						throw new Exception($connection->error);
+					}
+					
+				}
+				
+				$connection->close();
+				
+			}
+		}
+		
+		catch(Exception $e)
+		{
+			echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
+			echo '<br />Informacja developerska: '.$e;
+		}
+		
+	}
+
+
+?>
+
+
+
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
@@ -9,10 +134,20 @@
 	<meta name="author" content="Monika Burek">
 		
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">	
-	<link rel="stylesheet" href="style.css" type="text/css"/>
-	<link rel="stylesheet" href="css/fontello.css" type="text/css"/>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="css/fontello.css" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Lato:400,700&amp;subset=latin-ext" rel="stylesheet">
 	<script src='https://www.google.com/recaptcha/api.js'></script>
+	
+	<style>
+	.error
+	{
+		font-size : 13px;
+		color: red;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	</style>
 	
 </head>
 
@@ -45,33 +180,70 @@
 					
 					<div class="row text-center ">
 						<div class="col-md-4 col-md-offset-4 bg2">
-							<form class="form-horizontal" action="/action_page.php">
+							<form class="form-horizontal" method ="post">
 								
 								<div class="form-group">
 									<label class="control-label col-sm-3" for="name">Imie:</label>
 									<div class="col-sm-9">
-										<input type="name" class="form-control" id="name" placeholder="Podaj imię">
+										<input type="text" class="form-control"  name="name" placeholder="Podaj imię">
+										
+										<?php
+											if (isset($_SESSION['errorName']))
+											{
+												echo '<div class="error">'.$_SESSION['errorName'].'</div>';
+												unset($_SESSION['errorName']);
+											}
+										?>
 									</div>
 								</div>
 								
 								 <div class="form-group">
 									<label class="control-label col-sm-3" for="email">Email:</label>
 									<div class="col-sm-9">
-										<input type="email" class="form-control" id="email" placeholder="Podaj email">
+										<input type="email" class="form-control" value="<?php 
+											if (isset($_SESSION['formEmail']))
+											{
+												echo $_SESSION['formEmail'];
+												unset($_SESSION['formEmail']);
+											}
+										?>
+										" name="email" placeholder="Podaj email">
+										
+										<?php
+											if (isset($_SESSION['errorEmail']))
+											{
+												echo '<div class="error">'.$_SESSION['errorEmail'].'</div>';
+												unset($_SESSION['errorEmail']);
+											}
+										?>
 									</div>
 								</div>
 
 		
 								<div class="form-group">
-									<label class="control-label col-sm-3" for="passwordd">Hasło:</label>
+									<label class="control-label col-sm-3" for="password">Hasło:</label>
 									<div class="col-sm-9"> 
-										<input type="password" class="form-control" id="password" placeholder="Podaj hasło">
+										<input type="password" class="form-control" name="password" placeholder="Podaj hasło">
+										<?php
+											if (isset($_SESSION['errorPassword']))
+											{
+												echo '<div class="error">'.$_SESSION['errorPassword'].'</div>';
+												unset($_SESSION['errorPassword']);
+											}
+										?>
 									</div>
 								</div>
 								
 								<div class="col-sm-offset-1 col-sm-11">
 									<div class="g-recaptcha" data-sitekey="6Lc8028UAAAAAFQCzQEqlfLdnLK5fwfNXgwzBvsB">
 									</div>
+									<?php
+										if (isset($_SESSION['errorBot']))
+										{
+											echo '<div class="error">'.$_SESSION['errorBot'].'</div>';
+											unset($_SESSION['errorBot']);
+										}
+									?>	
 								</div>
 	  
 								<div class="form-group"> 

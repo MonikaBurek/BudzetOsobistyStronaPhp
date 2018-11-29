@@ -1,3 +1,29 @@
+<?php
+
+	session_start();
+	
+	if (!isset($_SESSION['successfulRegistration']))
+	{
+		header('Location: rejestracja.php');
+		exit();
+	}
+	else
+	{
+		unset($_SESSION['successfulRegistration']);
+	}
+	
+	// Delete variables that remember values ​​entered into the form
+	if (isset($_SESSION['formName'])) unset($_SESSION['formName']);
+	if (isset($_SESSION['formEmail'])) unset($_SESSION['formEmail']);
+	if (isset($_SESSION['formPassword'])) unset($_SESSION['formPassword']);
+	
+	// Delete registration errors
+	if (isset($_SESSION['errorName'])) unset($_SESSION['errorName']);
+	if (isset($_SESSION['errorEmail'])) unset($_SESSION['errorEmail']);
+	if (isset($_SESSION['errorPassword'])) unset($_SESSION['errorPassword']);
+	
+?>
+
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
@@ -9,8 +35,8 @@
 	<meta name="author" content="Monika Burek">
 		
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">	
-	<link rel="stylesheet" href="style.css" type="text/css"/>
-	<link rel="stylesheet" href="css/fontello.css" type="text/css"/>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="css/fontello.css">
 	<link href="https://fonts.googleapis.com/css?family=Lato:400,700&amp;subset=latin-ext" rel="stylesheet">
 	
 </head>
@@ -69,7 +95,7 @@
 								<p>Dzięki prowadzeniu budżetu domowego wiemy, ile wydajemy pieniędzy na poszczególne rzeczy: rachunki, jedzenie, podróże, przyjemności. Możemy dowiedzieć się ile z wydanych pieniędzy były przeznaczone na rzeczy, które są nam nie potrzebne. Gdy mamy pełną kontrolę nad wydatkami, łatwiej jest zaoszczędzić pieniądze na wyznaczony cel np. na nowy samochód czy wakacje. Można pomyśleć o odkładaniu pieniędzy na emeryturę lub "czarną godzinę". Gdy brakuje pieniędzy wiemy o jaką podwyżkę poprosić, ile trzeba zarobić w dodatkowej pracy, aby nie mieć długów.</p>
 
 								<h3 class="articleHeader">Jak działa aplikacja?</h3>
-								<p>Za pomocą zakładek menu głównego dodajemy przychody i wydatki (Dodaj przychód, Dodaj wydatek - wypełniamy formularz, przypisujemy kategorie). Używając zakładki Przeglądaj bilans możemy analizować nasze wydatki i przychody w danym okresie dla danych kategori. Jest możliwość zmiany wpisów oraz personalizacji kategorii przychodów i wydatków.</p>
+								<p>Za pomocą zakładek menu głównego dodajemy przychody i wydatki (Dodaj przychód, Dodaj wydatek - wypełniamy formularz, przypisujemy kategorie). Używając zakładki Przeglądaj bilans możemy analizować nasze wydatki i przychody w danym okresie dla danych kategorii. Jest możliwość zmiany wpisów oraz personalizacji kategorii przychodów i wydatków.</p>
 						
 								<h3 class="articleHeader">O autorze</h3>
 								<p>Mam na imię Monika. Jestem uczestniczką szkolenia Przyszły Programista.</p>

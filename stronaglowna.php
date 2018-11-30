@@ -1,28 +1,4 @@
-<?php
 
-	session_start();
-	
-	if (!isset($_SESSION['successfulRegistration']))
-	{
-		header('Location: logowanie.php');
-		exit();
-	}
-	else
-	{
-		unset($_SESSION['successfulRegistration']);
-	}
-	
-	// Delete variables that remember values ​​entered into the form
-	if (isset($_SESSION['formName'])) unset($_SESSION['formName']);
-	if (isset($_SESSION['formEmail'])) unset($_SESSION['formEmail']);
-	if (isset($_SESSION['formPassword'])) unset($_SESSION['formPassword']);
-	
-	// Delete registration errors
-	if (isset($_SESSION['errorName'])) unset($_SESSION['errorName']);
-	if (isset($_SESSION['errorEmail'])) unset($_SESSION['errorEmail']);
-	if (isset($_SESSION['errorPassword'])) unset($_SESSION['errorPassword']);
-	
-?>
 
 <!DOCTYPE HTML>
 <html lang="pl">

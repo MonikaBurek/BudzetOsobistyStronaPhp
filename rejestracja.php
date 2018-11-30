@@ -97,7 +97,7 @@
 						if($connection->query("INSERT INTO expenses_category_assigned_to_users(user_id, name) SELECT u.id AS user_id, d.name FROM users AS u CROSS JOIN expenses_category_default AS d WHERE u.email='$email'"))
 						{
 							$_SESSION['successfulRegistration'] = true;
-							header('Location: stronaglowna.php');
+							header('Location: witamy.php');
 						}
 						else
 						{

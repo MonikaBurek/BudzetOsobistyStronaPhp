@@ -10,16 +10,15 @@
 		//Validate your name
 		$name = $_POST['name'];
 		
-		$regularExpressionName = '/^[a-zA-ZŁŚĆŹŻĄĘÓŃąęółśżźćń]+$/';
+		$regularExpressionName = '/^[a-zA-Z]+$/';
   
 		if(preg_match($regularExpressionName, $name)==0)
 		{
 			$allGood = false;
-			$_SESSION['errorName']="Imie może składać się tylko z liter!";
+			$_SESSION['errorName']="Imie może składać się tylko z liter(bez polskich liter)!";
 		}
 		
-		
-		// $name = ucwords(strtolower($name));  // Format: Name
+		$name = ucwords(strtolower($name));  // Format: Name
 		
 		//Validate email
 		$email = $_POST['email'];
@@ -95,8 +94,15 @@
 					if ($connection->query("INSERT INTO users VALUES 
 					(NULL, '$name','$passwordHash','$email')"))
 					{
-						$_SESSION['successfulRegistration']=true;
-						header('Location: stronaglowna.php');
+						if($connection->query("INSERT INTO expenses_category_assigned_to_users(user_id, name) SELECT u.id AS user_id, d.name FROM users AS u CROSS JOIN expenses_category_default AS d WHERE u.email='$email'"))
+						{
+							$_SESSION['successfulRegistration'] = true;
+							header('Location: stronaglowna.php');
+						}
+						else
+						{
+							throw new Exception($connection->error);
+						}	
 					}
 					else
 					{
@@ -185,7 +191,14 @@
 								<div class="form-group">
 									<label class="control-label col-sm-3" for="name">Imie:</label>
 									<div class="col-sm-9">
-										<input type="text" class="form-control"  name="name" placeholder="Podaj imię">
+										<input type="text" class="form-control" value="<?php 
+											if (isset($_SESSION['formName']))
+											{
+												echo $_SESSION['formName'];
+												unset($_SESSION['formName']);
+											}
+										?>" name="name" placeholder="Podaj imię">
+									
 										
 										<?php
 											if (isset($_SESSION['errorName']))
@@ -200,14 +213,15 @@
 								 <div class="form-group">
 									<label class="control-label col-sm-3" for="email">Email:</label>
 									<div class="col-sm-9">
-										<input type="email" class="form-control" value="<?php 
+										<input type="email" class="form-control" value=
+										"<?php 
 											if (isset($_SESSION['formEmail']))
 											{
 												echo $_SESSION['formEmail'];
 												unset($_SESSION['formEmail']);
 											}
-										?>
-										" name="email" placeholder="Podaj email">
+										?>" name="email" placeholder="Podaj email">
+								        
 										
 										<?php
 											if (isset($_SESSION['errorEmail']))
@@ -223,7 +237,15 @@
 								<div class="form-group">
 									<label class="control-label col-sm-3" for="password">Hasło:</label>
 									<div class="col-sm-9"> 
-										<input type="password" class="form-control" name="password" placeholder="Podaj hasło">
+										<input type="password" class="form-control" value="<?php 
+											if (isset($_SESSION['formPassword']))
+											{
+												echo $_SESSION['formPassword'];
+												unset($_SESSION['formPassword']);
+											}
+										?>" name="password" placeholder="Podaj hasło">
+										
+										 
 										<?php
 											if (isset($_SESSION['errorPassword']))
 											{

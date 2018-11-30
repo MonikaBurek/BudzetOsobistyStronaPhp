@@ -4,7 +4,7 @@
 	
 	if (!isset($_SESSION['successfulRegistration']))
 	{
-		header('Location: rejestracja.php');
+		header('Location: logowanie.php');
 		exit();
 	}
 	else

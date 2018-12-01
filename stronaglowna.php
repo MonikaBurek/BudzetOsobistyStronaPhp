@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
@@ -54,7 +53,7 @@
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Wyloguj się</a></li>
+						<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Wyloguj się</a></li>
 					</ul>
 				</div>
 			</div>

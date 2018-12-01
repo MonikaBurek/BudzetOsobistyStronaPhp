@@ -1,3 +1,14 @@
+<?php
+
+	session_start();
+	
+	if((isset($_SESSION['userLoggedIn'])) && ($_SESSION['userLoggedIn']==true))
+	{
+		header ('Location: stronaglowna.php');
+		exit();
+	}
+?>
+
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
@@ -35,8 +46,8 @@
 					<div class="row text-center ">
 						<div class="col-md-4 col-md-offset-4 bg1">
 							<ul class="nav nav-pills nav-justified">
-								<li ><a href=#><h3>Rejestracja</h3>(Nie mam konta)</a></li>	
-								<li class="active"><a href=#><h3>Logowanie</h3>(Mam konto)</a></li>		
+								<li ><a href="rejestracja.php"><h3>Rejestracja</h3>(Nie mam konta)</a></li>	
+								<li class="active"><a href="index.php"><h3>Logowanie</h3>(Mam konto)</a></li>		
 							</ul>
 						</div>
 						<div class="col-md-4"></div>
@@ -44,20 +55,20 @@
 					
 					<div class="row text-center ">
 						<div class="col-md-4 col-md-offset-4 bg2">
-							<form class="form-horizontal" action="/action_page.php">
+							<form class="form-horizontal" action="zaloguj.php" method="post">
 								
 								 <div class="form-group">
-									<label class="control-label col-sm-3" for="email">Email:</label>
+									<label class="control-label col-sm-3" for="name">Login:</label>
 									<div class="col-sm-9">
-										<input type="email" class="form-control" id="email" placeholder="Podaj email">
+										<input type="text" class="form-control" name="name" placeholder="Podaj login">
 									</div>
 								</div>
 
 		
 								<div class="form-group">
-									<label class="control-label col-sm-3" for="passwordd">Hasło:</label>
+									<label class="control-label col-sm-3" for="password">Hasło:</label>
 									<div class="col-sm-9"> 
-										<input type="password" class="form-control" id="password" placeholder="Podaj hasło">
+										<input type="password" class="form-control" name="password" placeholder="Podaj hasło">
 									</div>
 								</div>
 	  
@@ -68,6 +79,13 @@
 									</div>
 								</div>
 							</form>	
+							
+							<?php
+								if(isset($_SESSION['errorLogin']))
+								{									
+									echo $_SESSION['errorLogin'];
+								}
+							?>
 								
 						</div>
 						<div class="col-md-4"></div>

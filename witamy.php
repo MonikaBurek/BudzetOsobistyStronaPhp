@@ -4,7 +4,7 @@
 	
 	if (!isset($_SESSION['successfulRegistration']))
 	{
-		header('Location: logowanie.php');
+		header('Location: index.php');
 		exit();
 	}
 	else
@@ -63,7 +63,7 @@
 						<div class="col-md-4 col-md-offset-4 bg2">
 							Dziękuję za rejestrację na stronie! Możesz już zalogować się na swoje konto!<br /><br />
 	
-							<a href="logowanie.php" class="btnSetting" role="button"> Zaloguj się na swoje konto!</a>
+							<a href="index.php" class="btnSetting" role="button"> Zaloguj się na swoje konto!</a>
 							<br /><br />	
 								
 						</div>

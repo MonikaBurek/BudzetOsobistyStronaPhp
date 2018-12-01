@@ -7,18 +7,23 @@
 		//Successful validation
 		$allGood = true;
 		
-		//Validate your name
+		//Validate your login
 		$name = $_POST['name'];
 		
-		$regularExpressionName = '/^[a-zA-Z]+$/';
-  
-		if(preg_match($regularExpressionName, $name)==0)
+		//Check length login
+		if ((strlen($name)<3) || (strlen($name)>20))
 		{
 			$allGood = false;
-			$_SESSION['errorName']="Imie może składać się tylko z liter(bez polskich liter)!";
+			$_SESSION['errorName']="Login musi posiadać od 3 do 20 znaków!";
 		}
 		
-		$name = ucwords(strtolower($name));  // Format: Name
+		if (ctype_alnum($name)==false)
+		{
+			$allGood = false;
+			$_SESSION['errorName']="Login może składać się tylko z liter(bez polskich liter) i cyfr!";
+		}
+		
+		$name = strtolower($name);  // Format: name
 		
 		//Validate email
 		$email = $_POST['email'];
@@ -75,6 +80,18 @@
 			}
 			else
 			{
+				//whether login already exists
+				$resultOfQuery=$connection->query("SELECT id FROM users WHERE username='$name'");
+				
+				if(!$resultOfQuery) throw new Exception($connection->error);
+				
+				$howNicks=$resultOfQuery->num_rows;
+				if($howNicks>0)
+				{
+					$allGood = false;
+					$_SESSION['errorName']="Istnieje już konto dla podanego loginu.";
+				}
+				
 				//whether mail already exists
 				$resultOfQuery=$connection->query("SELECT id FROM users WHERE email='$email'");
 				
@@ -86,6 +103,8 @@
 					$allGood = false;
 					$_SESSION['errorEmail']="Istnieje już konto dla podanego adresu mailowego.";
 				}
+				
+				
 				
 				//All Good
 				if ($allGood==true)
@@ -177,8 +196,8 @@
 					<div class="row text-center ">
 						<div class="col-md-4 col-md-offset-4 bg1">
 							<ul class="nav nav-pills nav-justified">
-								<li class="active"><a href=#><h3>Rejestracja</h3>(Nie mam konta)</a></li>	
-								<li><a href=#><h3>Logowanie</h3>(Mam konto)</a></li>		
+								<li class="active"><a href="rejestracja.php"><h3>Rejestracja</h3>(Nie mam konta)</a></li>	
+								<li><a href="index.php"><h3>Logowanie</h3>(Mam konto)</a></li>		
 							</ul>
 						</div>
 						<div class="col-md-4"></div>
@@ -189,7 +208,7 @@
 							<form class="form-horizontal" method ="post">
 								
 								<div class="form-group">
-									<label class="control-label col-sm-3" for="name">Imie:</label>
+									<label class="control-label col-sm-3" for="name">Login:</label>
 									<div class="col-sm-9">
 										<input type="text" class="form-control" value="<?php 
 											if (isset($_SESSION['formName']))
@@ -197,7 +216,7 @@
 												echo $_SESSION['formName'];
 												unset($_SESSION['formName']);
 											}
-										?>" name="name" placeholder="Podaj imię">
+										?>" name="name" placeholder="Podaj login">
 									
 										
 										<?php
@@ -210,7 +229,7 @@
 									</div>
 								</div>
 								
-								 <div class="form-group">
+								<div class="form-group">
 									<label class="control-label col-sm-3" for="email">Email:</label>
 									<div class="col-sm-9">
 										<input type="email" class="form-control" value=

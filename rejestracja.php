@@ -85,8 +85,8 @@
 				
 				if(!$resultOfQuery) throw new Exception($connection->error);
 				
-				$howNicks=$resultOfQuery->num_rows;
-				if($howNicks>0)
+				$howLogins=$resultOfQuery->num_rows;
+				if($howLogins>0)
 				{
 					$allGood = false;
 					$_SESSION['errorName']="Istnieje już konto dla podanego loginu.";
@@ -115,8 +115,23 @@
 					{
 						if($connection->query("INSERT INTO expenses_category_assigned_to_users(user_id, name) SELECT u.id AS user_id, d.name FROM users AS u CROSS JOIN expenses_category_default AS d WHERE u.email='$email'"))
 						{
-							$_SESSION['successfulRegistration'] = true;
-							header('Location: witamy.php');
+							if($connection->query("INSERT INTO incomes_category_assigned_to_users(user_id, name) SELECT u.id AS user_id, d.name FROM users AS u CROSS JOIN incomes_category_default AS d WHERE u.email='$email'"))
+							{
+								if($connection->query("INSERT INTO payment_methods_assigned_to_users(user_id, name) SELECT u.id AS user_id, d.name FROM users AS u CROSS JOIN payment_methods_default AS d WHERE u.email='$email'"))
+								{
+									$_SESSION['successfulRegistration'] = true;
+								    header('Location: witamy.php');
+								}
+								else
+								{
+									throw new Exception($connection->error);
+								}	
+							}
+							else
+							{
+								throw new Exception($connection->error);
+							}
+							
 						}
 						else
 						{

@@ -102,8 +102,8 @@
 					</div>
 			
 					<div class="row text-center ">
-						<div class="col-md-4 col-md-offset-4 bg2">
-							 Pomyślnie dodano przychód!								
+						<div class="col-md-4 col-md-offset-4 bg6">
+							 Przychód został zapisany!								
 						</div>
 						<div class="col-md-4"></div>
 					</div>

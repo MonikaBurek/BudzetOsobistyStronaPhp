@@ -429,3 +429,17 @@ a:hover, a:visited
 {
 	text-decoration:none;
 }	
+
+.bg6 
+{
+	background-color: white;
+	font-size: 23px;
+	color: #66B032;
+	font-weight: 700;
+	padding-top:50px;
+	padding-bottom:50px;
+	text-align:center;
+	-webkit-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	-moz-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);	
+}

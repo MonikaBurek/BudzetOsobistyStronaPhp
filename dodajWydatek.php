@@ -25,16 +25,16 @@
 		else
 		{
 			$allGood = false;
-			$_SESSION['errorAmountIncome']="Kwota musi być liczbą. Format:1234.45";
+			$_SESSION['errorAmountExpense']="Kwota musi być liczbą. Format:1234.45";
 		}
 		
 		//if the number format is appropriate
 		if($amount >= 1000000000)
 		{
 			$allGood = false;
-			$_SESSION['errorAmountIncome']="Kwota musi być liczbą mniejszą od 1 000 000 000.";
+			$_SESSION['errorAmountExpense']="Kwota musi być liczbą mniejszą od 1 000 000 000.";
 		}
-
+		
 		//validate date
 		$date = $_POST['date'];
 		$date = htmlentities($date,ENT_QUOTES, "UTF-8");
@@ -42,7 +42,7 @@
 		if($date == NULL)
 		{
 			$allGood = false;
-			$_SESSION['errorDateIncome'] = "Wybierz datę dla przychodu.";
+			$_SESSION['errorDateExpense'] = "Wybierz datę dla wydatku.";
 		}
 		
 		$currentDate = date('Y-m-d');
@@ -50,19 +50,32 @@
 		if($date > $currentDate)
 		{
 			$allGood = false;
-			$_SESSION['errorDateIncome'] = "Data musi być aktualna lub wcześniejsza.";	
+			$_SESSION['errorDateExpense'] = "Data musi być aktualna lub wcześniejsza.";	
 		}
 		
-		//if categories are selected
-		if(isset($_POST['categoryOfIncome'])) 
+		
+		//if paymentmethod  are selected
+		if(isset($_POST['paymentMethod'])) 
 		{
-			$category = $_POST['categoryOfIncome'];
-			$_SESSION['formCategoryIncome'] = $category;
+			$paymentMethod = $_POST['paymentMethod'];
+			$_SESSION['formPaymentMethod'] = $paymentMethod;
 		}
 		else
 		{
 			$allGood = false;
-			$_SESSION['errorCategoryIncome'] = "Wybierz kategorię dla przychodu.";
+			$_SESSION['errorPaymentMethod'] = "Wybierz kategorię dla płatności.";
+		}
+		
+		//if categories expense are selected
+		if(isset($_POST['categoryOfExpense'])) 
+		{
+			$category = $_POST['categoryOfExpense'];
+			$_SESSION['formCategoryExpense'] = $category;
+		}
+		else
+		{
+			$allGood = false;
+			$_SESSION['errorCategoryExpense'] = "Wybierz kategorię dla wydatku.";
 		}
 		
 		//Validate comment
@@ -72,13 +85,13 @@
 		if((strlen($comment) > 100))
 		{
 			$allGood = false;
-			$_SESSION['errorCommentIncome'] = "Komentarz może mieć maksymalnie 100 znaków.";
+			$_SESSION['errorCommentExpense'] = "Komentarz może mieć maksymalnie 100 znaków.";
 		}
 		
 		//Remember entered data
-		$_SESSION['formAmountIncome'] = $amount;
-		$_SESSION['formDateIncome'] = $date;
-		$_SESSION['formCommentIncome'] = $comment;
+		$_SESSION['formAmountExpense'] = $amount;
+		$_SESSION['formDateExpense'] = $date;
+		$_SESSION['formCommentExpense'] = $comment;
 		
 		//Connect database
 		require_once "connect.php";
@@ -97,12 +110,12 @@
 				//All Good
 				if ($allGood==true)
 				{
-					$sql="INSERT INTO incomes VALUES (NULL, '$userId',(SELECT id FROM incomes_category_assigned_to_users WHERE user_id ='$userId' AND name='$category'),'$amount','$date','$comment')";
+					$sql="INSERT INTO expenses VALUES (NULL, '$userId',(SELECT id FROM expenses_category_assigned_to_users WHERE user_id ='$userId' AND name='$category'),(SELECT id FROM payment_methods_assigned_to_users WHERE user_id ='$userId' AND name='$paymentMethod'),'$amount','$date','$comment')";
 					//Adding a user to the database
 					if ($connection->query($sql))
 					{
-						$_SESSION['successfulAddIncomes'] = true;
-					    header('Location:successIncomes.php');
+						$_SESSION['successfulAddExpense'] = true;
+					    header('Location:successExpense.php');
 					}
 					else
 					{
@@ -117,17 +130,18 @@
 			echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
 			echo '<br />Informacja developerska: '.$e;
 		}
+		
 	}
-
 ?>
+
 
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
-	<title>Dodaj przychód</title>
+	<title>Dodaj wydatek</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Dodaj przychód. Aplikacja do prowadzenie budżetu osobistego." />
+	<meta name="description" content="Dodaj wydatek. Aplikacja do prowadzenie budżetu osobistego." />
 	<meta name="keywords" content="budżet, osobisty, domowy" />
 	<meta name="author" content="Monika Burek">
 		
@@ -140,6 +154,7 @@
 
 <body>
 	<article class="articleFourElements">
+
 		<header>
 			<div class="jumbotron">
 				<div class="container text-center">
@@ -148,7 +163,6 @@
 				</div>
 			</div>
 		</header>
-	
 		
 		<nav class="navbar navbar-default navbarProperties">
 			<div class="container text-center">
@@ -163,8 +177,8 @@
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
 						<li><a href="stronaglowna.php">Strona główna</a></li>
-						<li class="active"><a href="dodajprzychod.php">Dodaj przychód</a></li>
-						<li><a href="dodajwydatek.php">Dodaj wydatek</a></li>
+						<li><a href="dodajprzychod.php">Dodaj przychód</a></li>
+						<li class="active"><a href="dodajwydatek.php">Dodaj wydatek</a></li>
 						<li><a href="#">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>
@@ -188,30 +202,29 @@
 					<div class="row text-justify ">
 						<div class="col-md-8 col-md-offset-2 bg3">
 							<article>
-								<form method ="post">
-								
+								<form method = "post">
+									
 									<div class="row">
 										<div class="form-group">
 											<label class="control-label col-sm-1"  for="amount">Kwota:</label>
 											<div class="col-sm-6">
-												<input type="text" class="form-control" value="<?php 
-											if (isset($_SESSION['formAmountIncome']))
+												<input type="amount" class="form-control" value="<?php 
+											if (isset($_SESSION['formAmountExpense']))
 											{
-												echo $_SESSION['formAmountIncome'];
-												unset($_SESSION['formAmountIncome']);
+												echo $_SESSION['formAmountExpense'];
+												unset($_SESSION['formAmountExpense']);
 											}
 										?>" name="amount">
 												<?php
-											if (isset($_SESSION['errorAmountIncome']))
+											if (isset($_SESSION['errorAmountExpense']))
 											{
-												echo '<div class="error">'.$_SESSION['errorAmountIncome'].'</div>';
-												unset($_SESSION['errorAmountIncome']);
+												echo '<div class="error">'.$_SESSION['errorAmountExpense'].'</div>';
+												unset($_SESSION['errorAmountExpense']);
 											}
-											?>
+											?> 
+												
 											</div>
-											<div class="col-sm-5">
-											</div>
-											
+											<div class="col-sm-5"></div>
 										</div>
 									</div>
 	  
@@ -220,29 +233,97 @@
 											<label class="control-label col-sm-1" for="dateExpense">Data:</label>
 											<div class="col-sm-6">
 												<input type="date" name="date" value="<?php 
-											if (isset($_SESSION['formDateIncome']))
+											if (isset($_SESSION['formDateExpense']))
 											{
-												echo $_SESSION['formDateIncome'];
-												unset($_SESSION['formDateIncome']);
+												echo $_SESSION['formDateExpense'];
+												unset($_SESSION['formDateExpense']);
 											}
 										?>" class="form-control" placeholder="dd-mm-rrrr" onfocus="this.placeholder=''" onblur="this.placeholder='dd-mm-rrrr">
 												<?php
-											if (isset($_SESSION['errorDateIncome']))
+											if (isset($_SESSION['errorDateExpense']))
 											{
-												echo '<div class="error">'.$_SESSION['errorDateIncome'].'</div>';
-												unset($_SESSION['errorDateIncome']);
+												echo '<div class="error">'.$_SESSION['errorDateExpense'].'</div>';
+												unset($_SESSION['errorDateExpense']);
 											}
 											?>
 											</div>
 											<div class="col-sm-5"></div>	  
 										</div>
 									</div>
+	 
+									<div class="row ">
+										<span class="titleForm">Sposób płatności:</span>
+									</div>
+<?php
+
+	//Connect database
+	require_once "connect.php";
+	mysqli_report(MYSQLI_REPORT_STRICT);
+		
+	try
+	{
+		$connection = new mysqli($host, $db_user, $db_password, $db_name);
+
+		if ($connection->connect_errno!=0)
+		{
+			throw new Exception(mysqli_connect_errno());
+		}
+		
+		else
+		{
+			//Check number of income categories
+			$userId = $_SESSION['id'];
+			
+			$resultOfQuery=$connection->query("SELECT name FROM payment_methods_assigned_to_users WHERE user_id ='$userId'");
+			
+			if(!$resultOfQuery) throw new Exception($connection->error);
+				
+			$howNames=$resultOfQuery->num_rows;
+			
+			
+			if($howNames>0)
+			{
+				while ($row = $resultOfQuery->fetch_assoc())
+				{
+					echo '<div class="row ">';
+					echo '<div class="col-sm-4 col-sm-offset-1">';
+					echo '<label class="radio-inline">';
+					echo '<input type="radio" name="paymentMethod" value="'.$row['name'];
+					
+					if(isset($_SESSION['formPaymentMethod']))
+					{
+						if($row['name'] == $_SESSION['formPaymentMethod']) 
+						{
+							echo '"checked ="checked"';
+						}
+					}
+					
+					echo '">'.$row['name'].'</label>';
+					echo '</div>';
+					echo '<div class="col-sm-5"></div>';
+					echo '</div>';	
+			    }
+				
+				$resultOfQuery->free_result();
+			}
+			else
+			{
+				
+			}
+		}
+		$connection->close();
+	}
+	catch(Exception $e)
+	{
+		echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
+		echo '<br />Informacja developerska: '.$e;
+	}
+?>		
 									
 									<div class="row rowExpense">
-										<span class="titleForm">Kategoria:</span>
+										<span class="titleForm">Kategoria płatności:</span>
 									</div>
-								
-<?php
+									<?php
 
 	//Connect database
 	require_once "connect.php";
@@ -258,16 +339,14 @@
 		
 		else
 		{
-			//Check number of income categories
+			//Check number of paymentMethod
 			$userId = $_SESSION['id'];
-			echo 'userid: '.$userId;
 			
-			$resultOfQuery=$connection->query("SELECT name FROM incomes_category_assigned_to_users WHERE user_id ='$userId'");
+			$resultOfQuery=$connection->query("SELECT name FROM expenses_category_assigned_to_users WHERE user_id ='$userId'");
 			
 			if(!$resultOfQuery) throw new Exception($connection->error);
 				
 			$howNames=$resultOfQuery->num_rows;
-			
 			
 			if($howNames>0)
 			{
@@ -276,11 +355,11 @@
 					echo '<div class="row ">';
 					echo '<div class="col-sm-4 col-sm-offset-1">';
 					echo '<label class="radio-inline">';
-					echo '<input type="radio" name="categoryOfIncome" value="'.$row['name'];
+					echo '<input type="radio" name="categoryOfExpense" value="'.$row['name'];
 					
-					if(isset($_SESSION['formCategoryIncome']))
+					if(isset($_SESSION['formCategoryExpense']))
 					{
-						if($row['name'] == $_SESSION['formCategoryIncome']) 
+						if($row['name'] == $_SESSION['formCategoryExpense']) 
 						{
 							echo '"checked ="checked"';
 						}
@@ -306,30 +385,26 @@
 		echo '<br />Informacja developerska: '.$e;
 	}
 ?>		
-<?php
-	if (isset($_SESSION['errorCategoryIncome']))
-	{
-		echo '<div class="error">'.$_SESSION['errorCategoryIncome'].'</div>';
-		unset($_SESSION['errorCategoryIncome']);
-	}
-?>								
+									
 									<div class="form-group rowExpense">
 										<label for="comment">Komentarz (opcjonalnie):</label>
-										<textarea class="form-control" rows="3" name="comment" ><?php 
-											if (isset($_SESSION['formCommentIncome']))
+										<textarea class="form-control" rows="3" name = "comment" ><?php 
+											if (isset($_SESSION['formCommentExpense']))
 											{
-												echo $_SESSION['formCommentIncome'];
-												unset($_SESSION['formCommentIncome']);
+												echo $_SESSION['formCommentExpense'];
+												unset($_SESSION['formCommentExpense']);
 											}
 										?></textarea>
 									<?php
-	if (isset($_SESSION['errorCommentIncome']))
+	if (isset($_SESSION['errorCommentExpense']))
 	{
-		echo '<div class="error">'.$_SESSION['errorCommentIncome'].'</div>';
-		unset($_SESSION['errorCommentIncome']);
+		echo '<div class="error">'.$_SESSION['errorCommentExpense'].'</div>';
+		unset($_SESSION['errorCommentExpense']);
 	}
 ?>	
 									</div>
+									
+									
 									
 									<div class="row ">
 									
@@ -337,7 +412,7 @@
 											<button type="submit" class="btnSetting">Dodaj</button>
 										</div>
 										<div class="col-sm-5">
-											<button type="reset" class="btnSetting">Anuluj</button>
+											<button type="submit" class="btnSetting">Anuluj</button>
 										</div>
 									
 									</div>
@@ -355,11 +430,10 @@
 		<footer class="container-fluid text-center">	
 			Wszystkie prawa zastrzeżone &copy; 2018  Dziękuję za wizytę!
 		</footer>
-		
-	</article>	
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	</article>
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	
 	
 </body>

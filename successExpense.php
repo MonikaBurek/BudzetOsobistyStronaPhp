@@ -9,28 +9,28 @@
 	}
 	
 	
-	if (!isset($_SESSION['successfulAddIncomes']))
+	if (!isset($_SESSION['successfulAddExpense']))
 	{
 		header('Location: stronaglowna.php');
 		exit();
 	}
 	else
 	{
-		unset($_SESSION['successfulAddIncomes']);
+		unset($_SESSION['successfulAddExpense']);
 		
 	}
 	
 	// Delete variables that remember values ​​entered into the form
-	if (isset($_SESSION['formAmountIncome'])) unset($_SESSION['formAmountIncome']);
-	if (isset($_SESSION['formDateIncome'])) unset($_SESSION['formDateIncome']);
-	if (isset($_SESSION['formCategoryIncome'])) unset($_SESSION['formCategoryIncome']);
-	if (isset($_SESSION['formCommentIncome'])) unset($_SESSION['formCommentIncome']);
+	if (isset($_SESSION['formAmountExpense'])) unset($_SESSION['formAmountExpense']);
+	if (isset($_SESSION['formDateExpense'])) unset($_SESSION['formDateExpense']);
+	if (isset($_SESSION['formCategoryExpense'])) unset($_SESSION['formCategoryExpense']);
+	if (isset($_SESSION['formCommentExpense'])) unset($_SESSION['formCommentExpense']);
 	
 	// Delete registration errors
-	if (isset($_SESSION['errorAmountIncome'])) unset($_SESSION['errorAmountIncome']);
-	if (isset($_SESSION['errorDateIncome'])) unset($_SESSION['errorDateIncome']);
-	if (isset($_SESSION['errorCategoryIncome'])) unset($_SESSION['errorCategoryIncome']);
-	if (isset($_SESSION['errorCommentIncome'])) unset($_SESSION['errorCommentIncome']);
+	if (isset($_SESSION['errorAmountExpense'])) unset($_SESSION['errorAmountExpense']);
+	if (isset($_SESSION['errorDateExpense'])) unset($_SESSION['errorDateExpense']);
+	if (isset($_SESSION['errorCategoryExpense'])) unset($_SESSION['errorCategoryExpense']);
+	if (isset($_SESSION['errorCommentExpense'])) unset($_SESSION['errorCommentExpense']);
 ?>
 
 <!DOCTYPE HTML>

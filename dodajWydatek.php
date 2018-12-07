@@ -100,6 +100,7 @@
 		try
 		{
 			$connection = new mysqli($host, $db_user, $db_password, $db_name);
+			$connection->set_charset("utf8");
 			if ($connection->connect_errno!=0)
 			{
 				throw new Exception(mysqli_connect_errno());
@@ -110,7 +111,7 @@
 				//All Good
 				if ($allGood==true)
 				{
-					$sql="INSERT INTO expenses VALUES (NULL, '$userId',(SELECT id FROM expenses_category_assigned_to_users WHERE user_id ='$userId' AND name='$category'),(SELECT id FROM payment_methods_assigned_to_users WHERE user_id ='$userId' AND name='$paymentMethod'),'$amount','$date','$comment')";
+					$sql="INSERT INTO expenses VALUES (NULL, '$userId',(SELECT id FROM expenses_category_assigned_to_users WHERE user_id ='$userId' AND name ='$category'),(SELECT id FROM payment_methods_assigned_to_users WHERE user_id ='$userId' AND name='$paymentMethod'),'$amount','$date','$comment')";
 					//Adding a user to the database
 					if ($connection->query($sql))
 					{
@@ -208,7 +209,7 @@
 										<div class="form-group">
 											<label class="control-label col-sm-1"  for="amount">Kwota:</label>
 											<div class="col-sm-6">
-												<input type="amount" class="form-control" value="<?php 
+												<input type="text" class="form-control" value="<?php 
 											if (isset($_SESSION['formAmountExpense']))
 											{
 												echo $_SESSION['formAmountExpense'];
@@ -263,7 +264,8 @@
 	try
 	{
 		$connection = new mysqli($host, $db_user, $db_password, $db_name);
-
+		$connection->set_charset("utf8");
+		
 		if ($connection->connect_errno!=0)
 		{
 			throw new Exception(mysqli_connect_errno());
@@ -318,6 +320,13 @@
 		echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
 		echo '<br />Informacja developerska: '.$e;
 	}
+?>	
+<?php
+	if (isset($_SESSION['errorPaymentMethod']))
+	{
+		echo '<div class="error">'.$_SESSION['errorPaymentMethod'].'</div>';
+		unset($_SESSION['errorPaymentMethod']);
+	}
 ?>		
 									
 									<div class="row rowExpense">
@@ -332,6 +341,7 @@
 	try
 	{
 		$connection = new mysqli($host, $db_user, $db_password, $db_name);
+		$connection->set_charset("utf8");
 		if ($connection->connect_errno!=0)
 		{
 			throw new Exception(mysqli_connect_errno());
@@ -384,7 +394,14 @@
 		echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
 		echo '<br />Informacja developerska: '.$e;
 	}
-?>		
+?>
+<?php
+	if (isset($_SESSION['errorCategoryExpense']))
+	{
+		echo '<div class="error">'.$_SESSION['errorCategoryExpense'].'</div>';
+		unset($_SESSION['errorCategoryExpense']);
+	}
+?>			
 									
 									<div class="form-group rowExpense">
 										<label for="comment">Komentarz (opcjonalnie):</label>

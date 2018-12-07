@@ -87,6 +87,7 @@
 		try
 		{
 			$connection = new mysqli($host, $db_user, $db_password, $db_name);
+			$connection->set_charset("utf8");
 			if ($connection->connect_errno!=0)
 			{
 				throw new Exception(mysqli_connect_errno());
@@ -251,6 +252,7 @@
 	try
 	{
 		$connection = new mysqli($host, $db_user, $db_password, $db_name);
+		$connection->set_charset("utf8");
 		if ($connection->connect_errno!=0)
 		{
 			throw new Exception(mysqli_connect_errno());
@@ -260,7 +262,6 @@
 		{
 			//Check number of income categories
 			$userId = $_SESSION['id'];
-			echo 'userid: '.$userId;
 			
 			$resultOfQuery=$connection->query("SELECT name FROM incomes_category_assigned_to_users WHERE user_id ='$userId'");
 			

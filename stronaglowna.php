@@ -41,7 +41,7 @@
 					<ul class="nav navbar-nav">
 						<li class="active"><a href="#">Strona główna</a></li>
 						<li><a href="dodajprzychod.php">Dodaj przychód</a></li>
-						<li><a href="#">Dodaj wydatek</a></li>
+						<li><a href="dodajWydatek.php">Dodaj wydatek</a></li>
 						<li><a href="#">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>

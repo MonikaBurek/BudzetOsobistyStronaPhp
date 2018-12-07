@@ -23,14 +23,17 @@
 	// Delete variables that remember values ​​entered into the form
 	if (isset($_SESSION['formAmountExpense'])) unset($_SESSION['formAmountExpense']);
 	if (isset($_SESSION['formDateExpense'])) unset($_SESSION['formDateExpense']);
+	if (isset($_SESSION['formPaymentMethod'])) unset($_SESSION['formPaymentMethod']);
 	if (isset($_SESSION['formCategoryExpense'])) unset($_SESSION['formCategoryExpense']);
 	if (isset($_SESSION['formCommentExpense'])) unset($_SESSION['formCommentExpense']);
 	
 	// Delete registration errors
 	if (isset($_SESSION['errorAmountExpense'])) unset($_SESSION['errorAmountExpense']);
 	if (isset($_SESSION['errorDateExpense'])) unset($_SESSION['errorDateExpense']);
+	if (isset($_SESSION['errorPaymentMethod'])) unset($_SESSION['errorPaymentMethod']);
 	if (isset($_SESSION['errorCategoryExpense'])) unset($_SESSION['errorCategoryExpense']);
 	if (isset($_SESSION['errorCommentExpense'])) unset($_SESSION['errorCommentExpense']);
+	
 ?>
 
 <!DOCTYPE HTML>
@@ -75,8 +78,8 @@
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
 						<li><a href="stronaglowna.php">Strona główna</a></li>
-						<li class="active"><a href="dodajprzychod.php">Dodaj przychód</a></li>
-						<li><a href="#">Dodaj wydatek</a></li>
+						<li><a href="dodajprzychod.php">Dodaj przychód</a></li>
+						<li class="active"><a href="dodajwydatek.php">Dodaj wydatek</a></li>
 						<li><a href="#">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>
@@ -103,7 +106,7 @@
 			
 					<div class="row text-center ">
 						<div class="col-md-4 col-md-offset-4 bg6">
-							 Przychód został zapisany!								
+							 Wydatek został zapisany!								
 						</div>
 						<div class="col-md-4"></div>
 					</div>

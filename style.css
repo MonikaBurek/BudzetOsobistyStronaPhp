@@ -443,3 +443,9 @@ a:hover, a:visited
 	-moz-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
 	box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);	
 }
+
+.btnSave
+{
+	background-color: #092834;
+	color: #F0F7D4;
+}

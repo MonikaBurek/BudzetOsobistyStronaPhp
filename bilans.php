@@ -8,11 +8,36 @@
 		exit();
 	}
 	
-	if(isset($_POST['periodOfTime']))
+	if(isset($_SESSION['formPeriodOfTime']))
 	{
 		$allGood = true;
-		$periodOfTime = $_POST['periodOfTime'];
-		$_SESSION['formPeriodOfTime'] = $periodOfTime;
+		$periodOfTime=$_SESSION['formPeriodOfTime'];
+		echo 'nazwa: '.$_SESSION['formPeriodOfTime'];
+		$now = date('Y-m-d');
+		
+		if($periodOfTime == "currentMonth")
+		{
+			$startDate = date('Y-m-d',strtotime("first day of this month"));
+			$endDate = date('Y-m-d',strtotime("now"));
+		}
+		else if($periodOfTime == "previousMonth")
+		{
+			$startDate = date('Y-m-d',strtotime("first day of previous month"));
+			$endDate = date('Y-m-d',strtotime("last day of previous month"));
+		}
+		else if($periodOfTime == "currentYear")
+		{
+			$startDate = date('Y-m-d',strtotime("1 January this year"));
+			$endDate = date('Y-m-d',strtotime("now"));
+		}
+		else if($periodOfTime == "selectedPeriod")
+		{
+	
+			
+			
+		}
+		echo ' początek: '.$startDate;
+		echo ' koniec: '.$endDate;
 	}
 	
 	
@@ -81,25 +106,16 @@
 
 		</nav>
 		
+		
+		
 		<main>
 			<div class="container"> 
 					<div class="row text-justify">
 						<div class="row rowWithMarginBottom">
-							<div class="col-md-5 col-md-offset-2 bg1">
-								<form class="form-inline bg3" action="saveDate.php" method="post">
-									<div class="form-group" >
-										<label for="periodOfTime">Wybierz okres czasu:</label>
-										<select class="form-control" id="periodOfTime" name="periodOfTime">
-											<option  value="currentMonth">Bieżący miesiąc</option>
-											<option  value="previousMonth">Poprzedni miesiąc</option>
-											<option  value="currentYear">Bieżący rok</option>
-											<option  value="selectedPeriod">Wybrany okres</option>
-										</select>
-									</div>
-									<button type="submit" class="btn btnSave">Zapisz</button>
-								</form>
-							</div>
-						</div>			
+							
+						</div>	
+							
+							
 					</div>							
 			</div>
 		</main>

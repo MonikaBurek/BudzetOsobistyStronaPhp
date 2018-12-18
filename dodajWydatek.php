@@ -41,7 +41,7 @@
 		
 		if($date == NULL)
 		{
-			$allGood = false;
+			$allGod = false;
 			$_SESSION['errorDateExpense'] = "Wybierz datę dla wydatku.";
 		}
 		

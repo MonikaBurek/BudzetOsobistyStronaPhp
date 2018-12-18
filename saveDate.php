@@ -13,8 +13,6 @@
 		$allGood = true;
 		$periodOfTime = $_POST['periodOfTime'];
 		$_SESSION['formPeriodOfTime'] = $periodOfTime;
-		
-		echo ' okres czasu:'.$periodOfTime;
 	}
 	
 	if(isset($_POST['startDate'])) 
@@ -24,16 +22,17 @@
 		$now = date('Y-m-d');
 		$startDate = htmlentities($startDate,ENT_QUOTES, "UTF-8");
 		$endDate = htmlentities($endDate,ENT_QUOTES, "UTF-8");
+		$allGood = true;
 		
 		if($startDate == NULL)
 		{
-			$allGod = false;
+			$allGood = false;
 			$_SESSION['errorStartDate'] = "Wybierz datę dla początku okresu.";
 		}
 				
 		if($endDate == NULL)
 		{
-			$allGod = false;
+			$allGood = false;
 			$_SESSION['errorEndDate'] = "Wybierz datę dla końca wykresu.";
 		}				
 					
@@ -48,12 +47,29 @@
 			$allGood = false;
 			$_SESSION['errorEndDate'] = "Data końca okresu nie może być większa od dzisiejszej daty.";
 		}
-					
-		if($endDate < $startDate)
+			
+		if($endDate!=NULL && $startDate!=NULL)
 		{
-			$allGood = false;
-			$_SESSION['errorEndDate'] = "Data końca okresu nie może być mniejsza od daty początku okresu.";
+			if($endDate < $startDate)
+			{
+				$allGood = false;
+				$_SESSION['errorEndDate'] = "Data końca okresu nie może być mniejsza od daty początku okresu.";
+			}
 		}
+		
+		$_SESSION['formStartDate'] = $startDate;
+		$_SESSION['formEndDate'] = $endDate;
+		
+		$_SESSION['periodStartDate'] = $startDate  ;
+		$_SESSION['periodEndDate'] = $endDate;
+		
+	
+		if ((isset($_SESSION['periodStartDate'])) && isset($_SESSION['periodEndDate']) && $allGood == true)
+		{
+			header ('Location: bilans.php');
+		}
+		
+		
 	}
 ?>
 
@@ -133,7 +149,7 @@
 				{
 		
 				echo '<div class="col-md-5 col-md-offset-2 bg3">';
-					echo '<form method = "POST">';
+					echo '<form method = "POST" >';
 							echo '<div class="row">';
 								echo '<h3 class="articleHeader">Wybierz okres czasu dla bilansu.</h3>';
 							echo '</div>';
@@ -141,9 +157,14 @@
 										echo '<div class="form-group">';
 										echo '<label class="control-label col-sm-4 text-right" for="startDate">Początek okresu:</label>';
 										echo '<div class="col-sm-6">';
-											echo '<input type="date" name="startDate" class="form-control" placeholder="dd-mm-rrrr">';
+											echo '<input type="date" name="startDate" value="';
+											if (isset($_SESSION['formStartDate']))
+											{
+												echo $_SESSION['formStartDate'];
+												unset($_SESSION['formStartDate']);
+											}
+											echo '"class="form-control" placeholder="dd-mm-rrrr">';
 											
-										
 											if (isset($_SESSION['errorStartDate']))
 											{
 												echo '<div class="error">'.$_SESSION['errorStartDate'].'</div>';
@@ -158,7 +179,13 @@
 								echo '<div class="form-group">';
 									echo '<label class="control-label col-sm-4 text-right" for="endDate">Koniec okresu:</label>';
 									echo '<div class="col-sm-6">';
-										echo '<input type="date" name="endDate" class="form-control" placeholder="dd-mm-rrrr">';
+										echo '<input type="date" name="endDate" value="';
+											if (isset($_SESSION['formEndDate']))
+											{
+												echo $_SESSION['formEndDate'];
+												unset($_SESSION['formEndDate']);
+											}
+											echo '" class="form-control" placeholder="dd-mm-rrrr">';
 										if (isset($_SESSION['errorEndDate']))
 											{
 												echo '<div class="error">'.$_SESSION['errorEndDate'].'</div>';
@@ -177,12 +204,12 @@
 							
 					echo '</form>';
 				echo '</div>';
+				
 				}
 				else if ($_SESSION['formPeriodOfTime'] == "currentMonth" || $_SESSION['formPeriodOfTime'] == "previousMonth" || $_SESSION['formPeriodOfTime'] == "currentYear")
 				{ 
 					header ('Location: bilans.php');
 				}
-				
 				
 				?>
 							

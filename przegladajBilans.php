@@ -8,13 +8,12 @@
 		exit();
 	}
 	
-	if(isset($_POST['periodOfTime']))
-	{
-		$allGood = true;
-		$periodOfTime = $_POST['periodOfTime'];
-		$_SESSION['formPeriodOfTime'] = $periodOfTime;
-	}
 	
+	if(isset($_SESSION['periodStartDate']))
+		unset($_SESSION['periodStartDate']);
+    
+	if(isset($_SESSION['periodEndDate']))
+		unset($_SESSION['periodEndDate']);
 	
 ?>
 

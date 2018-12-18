@@ -32,12 +32,11 @@
 		}
 		else if($periodOfTime == "selectedPeriod")
 		{
-	
-			
-			
+			$startDate = $_SESSION['periodStartDate'];
+			$endDate = $_SESSION['periodEndDate'];	
 		}
-		echo ' początek: '.$startDate;
-		echo ' koniec: '.$endDate;
+		echo $startDate.' ';
+		echo $endDate.' ';
 	}
 	
 	

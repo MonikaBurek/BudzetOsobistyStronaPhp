@@ -216,6 +216,7 @@
 												unset($_SESSION['formAmountExpense']);
 											}
 										?>" name="amount">
+										
 												<?php
 											if (isset($_SESSION['errorAmountExpense']))
 											{

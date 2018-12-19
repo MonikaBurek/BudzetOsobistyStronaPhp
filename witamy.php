@@ -42,7 +42,7 @@
 </head>
 
 <body>
-	<article>
+	<article class="articleThreeElements">
 		<header>
 			<div class="jumbotron">
 				<div class="container text-center">

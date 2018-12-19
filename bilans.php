@@ -109,13 +109,82 @@
 		
 		<main>
 			<div class="container"> 
-					<div class="row text-justify">
-						<div class="row rowWithMarginBottom">
+				<div class="row text-center">
+						
 							
-						</div>	
+<?php
+	//Connect database
+		require_once "connect.php";
+		mysqli_report(MYSQLI_REPORT_STRICT);
+		
+		try
+		{
+			$connection = new mysqli($host, $db_user, $db_password, $db_name);
+			$connection->set_charset("utf8");
+			if ($connection->connect_errno!=0)
+			{
+				throw new Exception(mysqli_connect_errno());
+			}
+			else
+			{
+				//Check number of income categories
+				$userId = $_SESSION['id'];
+				$sql ="SELECT c.name, SUM(i.amount) FROM users u INNER JOIN incomes i ON u.id = i.user_id INNER JOIN incomes_category_assigned_to_users c ON i.income_category_assigned_to_user_id = c.id WHERE u.id = $userId AND i.date_of_income >= '$startDate' AND  i.date_of_income <= '$endDate' GROUP BY c.id";
+			
+				$resultOfQuery=$connection->query($sql);
+			
+				if(!$resultOfQuery) throw new Exception($connection->error);
+				
+				$howCategory=$resultOfQuery->num_rows;
+				echo 'ilosc kategorii: '.$howCategory;
+			
+				if($howCategory>0)
+				{
+					echo '<div class="col-md-4 col-md-offset-2 bg3">';			
+						echo '<article>';
+							echo '<h4>Zestawienie przychodów dla poszczególnych kategorii w okresie od '.$startDate.' do '.$endDate.'</h4>';
+										
+							echo '<div class="table-responsive text-left">';          
+								echo '<div class="table-responsive">';         
+									echo '<table class="table table-striped table-bordered table-condensed">'; 
+										echo '<thead>'; 
+											 echo '<tr>'; 
+												echo '<th>Nazwa kategorii</th>'; 
+												echo '<th>Suma przychodów [zł]</th>'; 
+											echo '</tr>'; 
+										echo '</thead>'; 
+										echo '<tbody>'; 
+											while ($row = $resultOfQuery->fetch_assoc())
+											{
+												echo '<tr>'; 
+												echo '<td>'.$row['name'].'</td>'; 
+												echo '<td>'.$row['SUM(i.amount)'].'</td>'; 
+												echo '</tr>'; 
+											} 
+											$resultOfQuery->free_result();
+										echo '</tbody>'; 
+									echo '</table>'; 
+								echo '</div>'; 
+							echo '</div>'; 							
+						echo '</article>'; 
+					echo '</div>'; 	
+				}
+				else
+				{
+					echo "Brak przychodów w określonym czasie";
+				}			
+			}
+			$connection->close();
+		}
+		catch(Exception $e)
+		{
+			echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
+			echo '<br />Informacja developerska: '.$e;
+		}
+
+?>
 							
-							
-					</div>							
+				</div>										
 			</div>
 		</main>
 		

@@ -413,8 +413,9 @@ footer
 #chartContainer
 {
 	
-	height: 350px; 
+	height: 370px; 
 	width: 100%;
+	
 }
 
 .error
@@ -461,3 +462,9 @@ a:hover, a:visited
 	background-color: #070612;
 	color: #F0F7D4;
 }
+
+h4.bilansHeader
+{
+	weight: 700;
+}
+

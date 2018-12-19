@@ -12,7 +12,6 @@
 	{
 		$allGood = true;
 		$periodOfTime=$_SESSION['formPeriodOfTime'];
-		echo 'nazwa: '.$_SESSION['formPeriodOfTime'];
 		$now = date('Y-m-d');
 		
 		if($periodOfTime == "currentMonth")
@@ -35,8 +34,6 @@
 			$startDate = $_SESSION['periodStartDate'];
 			$endDate = $_SESSION['periodEndDate'];	
 		}
-		echo $startDate.' ';
-		echo $endDate.' ';
 	}
 	
 	
@@ -56,12 +53,11 @@
 	<link rel="stylesheet" href="style.css" type="text/css"/>
 	<link rel="stylesheet" href="css/fontello.css" type="text/css"/>
 	<link href="https://fonts.googleapis.com/css?family=Lato:400,700&amp;subset=latin-ext" rel="stylesheet">
-	
-	<script src="js/pieChart.js" type="text/javascript"></script>
+
 	
 </head>
 
-<body>
+<body onload="createPieChart()">
 	<article class="articleFourElements">
 		<header>
 			<div class="jumbotron">
@@ -110,7 +106,7 @@
 		<main>
 			<div class="container"> 
 				<div class="row text-center">
-						
+					<div class="col-md-4 col-md-offset-2 bg3">	
 							
 <?php
 	//Connect database
@@ -136,11 +132,9 @@
 				if(!$resultOfQuery) throw new Exception($connection->error);
 				
 				$howCategory=$resultOfQuery->num_rows;
-				echo 'ilosc kategorii: '.$howCategory;
 			
 				if($howCategory>0)
 				{
-					echo '<div class="col-md-4 col-md-offset-2 bg3">';			
 						echo '<article>';
 							echo '<h4>Zestawienie przychodów dla poszczególnych kategorii w okresie od '.$startDate.' do '.$endDate.'</h4>';
 										
@@ -166,12 +160,11 @@
 									echo '</table>'; 
 								echo '</div>'; 
 							echo '</div>'; 							
-						echo '</article>'; 
-					echo '</div>'; 	
+						echo '</article>'; 	
 				}
 				else
 				{
-					echo "Brak przychodów w określonym czasie";
+					echo '<h4 class="bilansHeader">Brak przychodów w okresie od '.$startDate.' do '.$endDate.'</h4>';
 				}			
 			}
 			$connection->close();
@@ -180,11 +173,189 @@
 		{
 			echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
 			echo '<br />Informacja developerska: '.$e;
-		}
-
+		}		
 ?>
+					</div>
+					<div class="col-md-1"></div>
+					<div class="col-md-4 bg3">
+					
+<?php
+	//Connect database
+		require_once "connect.php";
+		mysqli_report(MYSQLI_REPORT_STRICT);
+		
+		try
+		{
+			$connection = new mysqli($host, $db_user, $db_password, $db_name);
+			$connection->set_charset("utf8");
+			if ($connection->connect_errno!=0)
+			{
+				throw new Exception(mysqli_connect_errno());
+			}
+			else
+			{
+				//Check number of income categories
+				$userId = $_SESSION['id'];
+				$sql ="SELECT c.name, SUM(e.amount) FROM users u INNER JOIN expenses e ON u.id = e.user_id INNER JOIN expenses_category_assigned_to_users c ON e.expense_category_assigned_to_user_id = c.id WHERE u.id = $userId AND e.date_of_expense >= '$startDate' AND  e.date_of_expense <= '$endDate' GROUP BY c.id";
+			
+				$resultOfQuery=$connection->query($sql);
+			
+				if(!$resultOfQuery) throw new Exception($connection->error);
+				
+				$howCategory=$resultOfQuery->num_rows;
+			
+				if($howCategory>0)
+				{
+						echo '<article>';
+							echo '<h4>Zestawienie wydatków dla poszczególnych kategorii w okresie od '.$startDate.' do '.$endDate.'</h4>';
+										
+							echo '<div class="table-responsive text-left">';          
+								echo '<div class="table-responsive">';         
+									echo '<table class="table table-striped table-bordered table-condensed">'; 
+										echo '<thead>'; 
+											 echo '<tr>'; 
+												echo '<th>Nazwa kategorii</th>'; 
+												echo '<th>Suma przychodów [zł]</th>'; 
+											echo '</tr>'; 
+										echo '</thead>'; 
+										echo '<tbody>';
+										$i = 0;								
+											while ($row = $resultOfQuery->fetch_assoc())
+											{
+												echo '<tr>'; 
+												echo '<td>'.$row['name'].'</td>';
+												$dataPoints[$i]["label"]= $row['name'];
+												echo '<td>'.$row['SUM(e.amount)'].'</td>';
+												$dataPoints[$i]["y"]= $row['SUM(e.amount)'];
+												echo '</tr>'; 
+												$i=$i+1;
+											} 
+											$resultOfQuery->free_result();
+										echo '</tbody>'; 
+									echo '</table>'; 
+								echo '</div>'; 
+							echo '</div>'; 							
+						echo '</article>'; 	
+				}
+				else
+				{
+					echo '<h4 class="bilansHeader">Brak wydatków w okresie od '.$startDate.' do '.$endDate.'</h4>';
+				}			
+			}
+			$connection->close();
+		}
+		catch(Exception $e)
+		{
+			echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
+			echo '<br />Informacja developerska: '.$e;
+		}		
+?>					
+					
+					
+					</div>	
+					<div class="col-md-1"></div>
+				</div>
+
+				<div class="row emptyRow"></div>
+					
+				<div class="row ">
+					<div class="col-md-6  col-sm-12 col-md-offset-3 ">
 							
-				</div>										
+								<script>
+function createPieChart () 
+{
+	var chart = new CanvasJS.Chart("chartContainer", {
+				exportEnabled: true,
+				animationEnabled: true,
+				title:{
+					text: "Zestawienie wydatków w danym okresie."
+				},
+				legend:{
+					cursor: "pointer",
+					itemclick: explodePie
+				},
+				data: [{
+					type: "pie",
+					showInLegend: "true",
+					legendText: "{label}",
+					indexLabelFontSize: 16,
+					indexLabel: "{label} (#percent%)",
+					dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+				}]
+			});
+			
+	chart.render();
+	chart.title.set("fontSize", 24);
+	chart.title.set("fontColor", "#092834", false);
+	chart.legend.set("fontSize", 16);
+}
+
+function explodePie (e) 
+{
+			if(typeof (e.dataSeries.dataPoints[e.dataPointIndex].exploded) === "undefined" || !e.dataSeries.dataPoints[e.dataPointIndex].exploded) {
+				e.dataSeries.dataPoints[e.dataPointIndex].exploded = true;
+			} else {
+				e.dataSeries.dataPoints[e.dataPointIndex].exploded = false;
+			}
+			e.chart.render();
+
+}
+	</script>	
+							
+							
+							<div id="chartContainer"></div>
+							
+						</div>
+						<div class="col-md-3"></div>
+				</div>
+					
+                <div class="row emptyRow"></div>				
+				
+				<div class="row ">
+						<div class="col-md-6 col-md-offset-3 bg5">
+							<div class="col-md-3 col-md-offset-1">Suma przychodów:</div>
+							<div class="col-md-3">
+							
+								<div class="well well-sm wellResult">2000 zł</div>
+							</div>	
+							<div class="col-md-5"></div>	
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					
+					<div class="row ">
+						<div class="col-md-6 col-md-offset-3 bg5 ">
+							<div class="col-md-3 col-md-offset-1">Suma wydatków:</div>
+							<div class="col-md-3">
+							
+								<div class="well well-sm wellResult">1500 zł</div>
+							</div>	
+							<div class="col-md-5"></div>	
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					
+					<div class="row ">
+						<div class="col-md-6 col-md-offset-3 bg5 ">
+							<div class="col-md-3 col-md-offset-1">Różnica:</div>
+							<div class="col-md-3">
+							
+								<div class="well well-sm wellFinalResult">
+									<div id="differenceNumber">500</div>
+								</div>
+							</div>
+							
+							<div class="col-md-5 ">
+								<div id="differenceText"> Wyświetla tekst Ok lub nie OK</div>
+								<script src="js/functionDisplayText.js"></script>
+							</div>	
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					
+					<div class="row emptyRow"></div>	
+				
+				
 			</div>
 		</main>
 		
@@ -197,7 +368,7 @@
 	</article>	
 		 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		 
+		 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 	
 </body>
 </html>

@@ -75,7 +75,7 @@ article
 
 .bg1
 {
-	background-color: white;
+	background-color: white; 
 	color: #092834;
 	padding: 0;
 }
@@ -83,8 +83,13 @@ article
 
 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
     color: #092834;
-    background-color: #F0F7D4;
+    background-color: white;
 	cursor: default;	
+}
+
+.nav-pills>li.noactive
+{
+	background-color: #F0F7D4;
 }
 
 
@@ -377,18 +382,12 @@ footer
 .wellFinalResult
 {
 	border: 4px double #092834;
-	background-color:#66B032;
+	background-color:#B2D732;
 	color: #092834;
 	padding: 5px;
 	width: 100px;
 }
 
-#differenceText
-{
-	padding: 5px;
-	background-color:#66B032;
-	text-align:center;
-}
 
 .bg5
 {
@@ -468,3 +467,23 @@ h4.bilansHeader
 	weight: 700;
 }
 
+.bg7
+{
+	border: #347B98;
+    background-color: #66B032;
+    color: black;
+    font-weight: 700;
+}
+
+.bg8
+{
+	
+	background-color: #F0F7D4;
+	color: #092834;
+	font-weight: 700;
+	border-radius: 5px;
+	letter-spacing: 2px;
+	font-size: 17px;
+	padding:10px;
+	text-align:center;
+}

@@ -80,7 +80,7 @@
 						<li><a href="stronaglowna.php">Strona główna</a></li>
 						<li><a href="dodajprzychod.php">Dodaj przychód</a></li>
 						<li class="active"><a href="dodajwydatek.php">Dodaj wydatek</a></li>
-						<li><a href="#">Przeglądaj bilans</a></li>
+						<li><a href="przegladajbilans.php">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -106,7 +106,11 @@
 			
 					<div class="row text-center ">
 						<div class="col-md-4 col-md-offset-4 bg6">
-							 Wydatek został zapisany!								
+							 Wydatek został zapisany!
+							<br /><br />
+	
+							<a href="dodajwydatek.php" class="btnSetting" role="button"> Dodaj kolejny wydatek!</a>
+							<br />								 
 						</div>
 						<div class="col-md-4"></div>
 					</div>

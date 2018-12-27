@@ -312,45 +312,161 @@ function explodePie (e)
                 <div class="row emptyRow"></div>				
 				
 				<div class="row ">
-						<div class="col-md-6 col-md-offset-3 bg5">
-							<div class="col-md-3 col-md-offset-1">Suma przychodów:</div>
-							<div class="col-md-3">
+						<div class="col-md-6 col-md-offset-3 bg7">
+							<div class="col-md-5">Suma przychodów [zł]:</div>
+							<div class="col-md-4">
 							
-								<div class="well well-sm wellResult">2000 zł</div>
+								<div class="well well-sm wellResult">
+								
+<?php
+	//Connect database
+		require_once "connect.php";
+		mysqli_report(MYSQLI_REPORT_STRICT);
+		
+		try
+		{
+			$connection = new mysqli($host, $db_user, $db_password, $db_name);
+			$connection->set_charset("utf8");
+			if ($connection->connect_errno!=0)
+			{
+				throw new Exception(mysqli_connect_errno());
+			}
+			else
+			{
+				//SUM incomes
+				$userId = $_SESSION['id'];
+				$sql ="SELECT SUM(i.amount) FROM users u INNER JOIN incomes i ON u.id = i.user_id WHERE u.id = $userId AND i.date_of_income >= '$startDate' AND  i.date_of_income <= '$endDate'";
+			
+				$resultOfQuery=$connection->query($sql);
+			
+				if(!$resultOfQuery) throw new Exception($connection->error);
+				
+				$howRecords=$resultOfQuery->num_rows;
+			
+				if($howRecords>0)
+				{
+													
+					while ($row = $resultOfQuery->fetch_assoc())
+					{
+						echo $row['SUM(i.amount)'];	
+						$sumIncomes = $row['SUM(i.amount)'];
+					} 
+					$resultOfQuery->free_result();
+							
+				}
+						
+			}
+			$connection->close();
+		}
+		catch(Exception $e)
+		{
+			echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
+			echo '<br />Informacja developerska: '.$e;
+		}		
+?>	
+										
+								 </div>
 							</div>	
-							<div class="col-md-5"></div>	
+							<div class="col-md-3"></div>	
 						</div>
 						<div class="col-md-3"></div>
 					</div>
 					
 					<div class="row ">
-						<div class="col-md-6 col-md-offset-3 bg5 ">
-							<div class="col-md-3 col-md-offset-1">Suma wydatków:</div>
-							<div class="col-md-3">
+						<div class="col-md-6 col-md-offset-3 bg7 ">
+							<div class="col-md-5">Suma wydatków [zł]:</div>
+							<div class="col-md-4">
 							
-								<div class="well well-sm wellResult">1500 zł</div>
+								<div class="well well-sm wellResult">
+<?php
+	//Connect database
+		require_once "connect.php";
+		mysqli_report(MYSQLI_REPORT_STRICT);
+		
+		try
+		{
+			$connection = new mysqli($host, $db_user, $db_password, $db_name);
+			$connection->set_charset("utf8");
+			if ($connection->connect_errno!=0)
+			{
+				throw new Exception(mysqli_connect_errno());
+			}
+			else
+			{
+				//Sum expenses
+				$userId = $_SESSION['id'];
+				$sql ="SELECT SUM(e.amount) FROM users u INNER JOIN expenses e ON u.id = e.user_id WHERE u.id = $userId AND e.date_of_expense >= '$startDate' AND  e.date_of_expense <= '$endDate'";
+			
+				$resultOfQuery=$connection->query($sql);
+			
+				if(!$resultOfQuery) throw new Exception($connection->error);
+				
+				$howRecords=$resultOfQuery->num_rows;
+			
+				if($howRecords>0)
+				{
+													
+					while ($row = $resultOfQuery->fetch_assoc())
+					{
+						echo $row['SUM(e.amount)'];
+						$sumExpenses = $row['SUM(e.amount)'];
+						
+					} 
+					$resultOfQuery->free_result();
+							
+				}
+						
+			}
+			$connection->close();
+		}
+		catch(Exception $e)
+		{
+			echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o rejestrację w innym terminie!</span>';
+			echo '<br />Informacja developerska: '.$e;
+		}		
+?>												
+								
+								</div>
 							</div>	
-							<div class="col-md-5"></div>	
+							<div class="col-md-3"></div>	
 						</div>
 						<div class="col-md-3"></div>
 					</div>
 					
 					<div class="row ">
-						<div class="col-md-6 col-md-offset-3 bg5 ">
-							<div class="col-md-3 col-md-offset-1">Różnica:</div>
+						<div class="col-md-6 col-md-offset-3 bg7 ">
+							<div class="col-md-3 col-md-offset-2">Różnica:</div>
 							<div class="col-md-3">
 							
 								<div class="well well-sm wellFinalResult">
-									<div id="differenceNumber">500</div>
+									<div id="differenceNumber">
+									<?php
+									$difference = $sumIncomes - $sumExpenses;
+									echo $difference;
+									?>
+									</div>
 								</div>
 							</div>
 							
-							<div class="col-md-5 ">
-								<div id="differenceText"> Wyświetla tekst Ok lub nie OK</div>
-								<script src="js/functionDisplayText.js"></script>
+							<div class="col-md-4 ">
+								 
 							</div>	
 						</div>
-						<div class="col-md-3"></div>
+						<div class="col-md-3"> 
+						
+						</div>
+					</div>
+					
+					<div class="row ">
+						<div class="col-md-6 col-md-offset-3 bg7">
+							<div class="col-md-6 col-md-offset-3 bg8">
+								<div id="differenceText"></div>
+								<button class="btnSave" onclick="displayText()">Sprawdź czy dobrze zarządzasz finasami?</button>
+								<script src="js/functionDisplayText.js"></script>
+							</div>
+							<div class="col-md-3 "></div>
+						</div>	
+						<div class="col-md-3 "></div>	
 					</div>
 					
 					<div class="row emptyRow"></div>	

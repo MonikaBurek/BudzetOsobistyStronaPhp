@@ -1,5 +1,4 @@
 // Przeglądaj bilans: napis
-
 function displayText()
 {
 	
@@ -11,14 +10,20 @@ function displayText()
 	differenceInBalance = Number(differenceInBalanceString);
 	
 	
-	if (differenceInBalance >= 0)
+	if (differenceInBalance > 0)
 	{
-		text = differenceInBalance + 'Gratulacje.Świetnie zarządzasz finasami!';
+		text = 'Gratulacje. Świetnie zarządzasz finasami!';
 	}
-	else (differenceInBalance < 0)
+	else if (differenceInBalance < 0)
 	{
-		text = differenceInBalance + 'Uważaj, wpadasz w długi!';
+		text = 'Uważaj, wpadasz w długi!';
+	}
+	else
+	{
+		text = 'Jest zero.';
 	}
 	
 	document.getElementById("differenceText").innerHTML = text;
 }
+
+

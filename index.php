@@ -46,7 +46,7 @@
 					<div class="row text-center ">
 						<div class="col-md-4 col-md-offset-4 bg1">
 							<ul class="nav nav-pills nav-justified">
-								<li ><a href="rejestracja.php"><h3>Rejestracja</h3>(Nie mam konta)</a></li>	
+								<li class="noactive"><a href="rejestracja.php"><h3>Rejestracja</h3>(Nie mam konta)</a></li>	
 								<li class="active"><a href="index.php"><h3>Logowanie</h3>(Mam konto)</a></li>		
 							</ul>
 						</div>

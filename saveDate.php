@@ -140,9 +140,7 @@
 		
 		<main>
 			<div class="container"> 
-				<div class="row text-justify">
-						
-							
+				<div class="row text-justify">			
 				
 				<?php
 				if(isset($_SESSION['formPeriodOfTime'])&& $_SESSION['formPeriodOfTime'] == "selectedPeriod")

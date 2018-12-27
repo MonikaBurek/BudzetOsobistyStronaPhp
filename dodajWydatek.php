@@ -180,7 +180,7 @@
 						<li><a href="stronaglowna.php">Strona główna</a></li>
 						<li><a href="dodajprzychod.php">Dodaj przychód</a></li>
 						<li class="active"><a href="dodajwydatek.php">Dodaj wydatek</a></li>
-						<li><a href="#">Przeglądaj bilans</a></li>
+						<li><a href="przegladajbilans.php">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -276,7 +276,7 @@
 		{
 			//Check number of income categories
 			$userId = $_SESSION['id'];
-			
+	
 			$resultOfQuery=$connection->query("SELECT name FROM payment_methods_assigned_to_users WHERE user_id ='$userId'");
 			
 			if(!$resultOfQuery) throw new Exception($connection->error);

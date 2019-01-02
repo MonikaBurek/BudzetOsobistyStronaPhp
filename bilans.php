@@ -206,6 +206,7 @@
 			
 				if($howCategory>0)
 				{
+					$noExpenses = false;
 						echo '<article>';
 							echo '<h4>Zestawienie wydatków dla poszczególnych kategorii w okresie od '.$startDate.' do '.$endDate.'</h4>';
 										
@@ -240,6 +241,9 @@
 				else
 				{
 					echo '<h4 class="bilansHeader">Brak wydatków w okresie od '.$startDate.' do '.$endDate.'</h4>';
+					$noExpenses = true;
+					
+				
 				}			
 			}
 			$connection->close();
@@ -257,7 +261,7 @@
 				</div>
 
 				<div class="row emptyRow"></div>
-					
+								
 				<div class="row ">
 					<div class="col-md-6  col-sm-12 col-md-offset-3 ">
 							
@@ -302,8 +306,10 @@ function explodePie (e)
 }
 	</script>	
 							
-							
-							<div id="chartContainer"></div>
+<?php		
+						if ($noExpenses == false)
+						echo '<div id="chartContainer"></div>';
+?>
 							
 						</div>
 						<div class="col-md-3"></div>
@@ -351,10 +357,9 @@ function explodePie (e)
 						echo $row['SUM(i.amount)'];	
 						$sumIncomes = $row['SUM(i.amount)'];
 					} 
-					$resultOfQuery->free_result();
-							
-				}
-						
+					
+					$resultOfQuery->free_result();		
+				}		
 			}
 			$connection->close();
 		}
@@ -379,6 +384,7 @@ function explodePie (e)
 							
 								<div class="well well-sm wellResult">
 <?php
+
 	//Connect database
 		require_once "connect.php";
 		mysqli_report(MYSQLI_REPORT_STRICT);
@@ -412,10 +418,10 @@ function explodePie (e)
 						$sumExpenses = $row['SUM(e.amount)'];
 						
 					} 
-					$resultOfQuery->free_result();
-							
+					$resultOfQuery->free_result();		
 				}
-						
+				
+							
 			}
 			$connection->close();
 		}
@@ -442,7 +448,7 @@ function explodePie (e)
 									<div id="differenceNumber">
 									<?php
 									$difference = $sumIncomes - $sumExpenses;
-									echo $difference;
+									echo number_format($difference,2,'.', '');
 									?>
 									</div>
 								</div>

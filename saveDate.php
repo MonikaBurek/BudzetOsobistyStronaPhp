@@ -115,10 +115,10 @@
 				
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
-						<li><a href="stronaglowna.php">Strona główna</a></li>
-						<li><a href="dodajprzychod.php">Dodaj przychód</a></li>
-						<li><a href="dodajwydatek.php">Dodaj wydatek</a></li>
-						<li class="active"><a href="przegladajbilans.php">Przeglądaj bilans</a></li>
+						<li><a href="stronaGlowna.php">Strona główna</a></li>
+						<li><a href="dodajPrzychod.php">Dodaj przychód</a></li>
+						<li><a href="dodajWydatek.php">Dodaj wydatek</a></li>
+						<li class="active"><a href="przegladajBilans.php">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>
 								<ul class="dropdown-menu">

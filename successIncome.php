@@ -1,3 +1,37 @@
+<?php
+
+	session_start();
+	
+	if(!isset($_SESSION['userLoggedIn']))
+	{
+		header ('Location: index.php');
+		exit();
+	}
+	
+	
+	if (!isset($_SESSION['successfulAddIncome']))
+	{
+		header('Location: home.php');
+		exit();
+	}
+	else
+	{
+		unset($_SESSION['successfulAddIncome']);
+		
+	}
+	
+	// Delete variables that remember values ​​entered into the form
+	if (isset($_SESSION['formAmountIncome'])) unset($_SESSION['formAmountIncome']);
+	if (isset($_SESSION['formDateIncome'])) unset($_SESSION['formDateIncome']);
+	if (isset($_SESSION['formCategoryIncome'])) unset($_SESSION['formCategoryIncome']);
+	if (isset($_SESSION['formCommentIncome'])) unset($_SESSION['formCommentIncome']);
+	
+	// Delete registration errors
+	if (isset($_SESSION['errorAmountIncome'])) unset($_SESSION['errorAmountIncome']);
+	if (isset($_SESSION['errorDateIncome'])) unset($_SESSION['errorDateIncome']);
+	if (isset($_SESSION['errorCategoryIncome'])) unset($_SESSION['errorCategoryIncome']);
+	if (isset($_SESSION['errorCommentIncome'])) unset($_SESSION['errorCommentIncome']);
+?>
 
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -26,6 +60,7 @@
 				</div>
 			</div>
 		</header>
+	
 		
 		<nav class="navbar navbar-default navbarProperties">
 			<div class="container text-center">
@@ -39,10 +74,10 @@
 				
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="stronaGlowna.php">Strona główna</a></li>
-						<li><a href="dodajPrzychod.php">Dodaj przychód</a></li>
-						<li><a href="dodajWydatek.php">Dodaj wydatek</a></li>
-						<li><a href="przegladajBilans.php">Przeglądaj bilans</a></li>
+						<li><a href="home.php">Strona główna</a></li>
+						<li class="active"><a href="addIncome.php">Dodaj przychód</a></li>
+						<li><a href="addExpense.php">Dodaj wydatek</a></li>
+						<li><a href="viewBalance.php">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -62,33 +97,28 @@
 		
 		<main>
 			<div class="container"> 
-					<div class="row text-justify ">
-						<div class="col-md-8 col-md-offset-2 bg3">
-							<article>
-					
-								<h3 class="articleHeader">Budżet domowy</h3>
-								<p>Dzięki prowadzeniu budżetu domowego wiemy, ile wydajemy pieniędzy na poszczególne rzeczy: rachunki, jedzenie, podróże, przyjemności. Możemy dowiedzieć się ile z wydanych pieniędzy były przeznaczone na rzeczy, które są nam nie potrzebne. Gdy mamy pełną kontrolę nad wydatkami, łatwiej jest zaoszczędzić pieniądze na wyznaczony cel np. na nowy samochód czy wakacje. Można pomyśleć o odkładaniu pieniędzy na emeryturę lub "czarną godzinę". Gdy brakuje pieniędzy wiemy o jaką podwyżkę poprosić, ile trzeba zarobić w dodatkowej pracy, aby nie mieć długów.</p>
-
-								<h3 class="articleHeader">Jak działa aplikacja?</h3>
-								<p>Za pomocą zakładek menu głównego dodajemy przychody i wydatki (Dodaj przychód, Dodaj wydatek - wypełniamy formularz, przypisujemy kategorie). Używając zakładki Przeglądaj bilans możemy analizować nasze wydatki i przychody w danym okresie dla danych kategorii. Jest możliwość zmiany wpisów oraz personalizacji kategorii przychodów i wydatków.</p>
-						
-								<h3 class="articleHeader">O autorze</h3>
-								<p>Mam na imię Monika. Jestem uczestniczką szkolenia Przyszły Programista.</p>
-						</article>		
-						
-						</div>
-							
-						<div class="col-md-2"></div>
+					<div class="row text-center">
+						<div class="col-md-12 space"></div>
 					</div>
-					
+			
 					<div class="row text-center ">
-						<div class="col-md-4 col-md-offset-4">
-							<img class="img-responsive img-rounded" src="img/coins.jpg" alt="coins">
-								
+						<div class="col-md-4 col-md-offset-4 bg6">
+							 Przychód został zapisany!
+							<br /><br />
+	
+							<a href="addIncome.php" class="btnSetting" role="button"> Dodaj kolejny przychód!</a>
+							<br />	
+							 
 						</div>
 						<div class="col-md-4"></div>
 					</div>
 					
+					<div class="row text-center">
+						<div class="col-md-12 space"></div>
+					</div>
+					<div class="row text-center">
+						<div class="col-md-12 space"></div>
+					</div>
 			</div>
 		</main>
 		

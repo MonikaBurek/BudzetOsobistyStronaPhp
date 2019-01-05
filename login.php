@@ -43,7 +43,7 @@
 						
 						unset($_SESSION['errorLogin']);
 						$resultOfQuery->free_result();
-						header('Location: stronaGlowna.php');
+						header('Location: home.php');
 					}
 					else
 					{

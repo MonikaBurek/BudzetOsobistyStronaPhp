@@ -102,8 +102,8 @@
 					//Adding a user to the database
 					if ($connection->query($sql))
 					{
-						$_SESSION['successfulAddIncomes'] = true;
-					    header('Location:successIncomes.php');
+						$_SESSION['successfulAddIncome'] = true;
+					    header('Location:successIncome.php');
 					}
 					else
 					{
@@ -163,10 +163,10 @@
 				
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
-						<li><a href="stronaGlowna.php">Strona główna</a></li>
-						<li class="active"><a href="dodajPrzychod.php">Dodaj przychód</a></li>
-						<li><a href="dodajWydatek.php">Dodaj wydatek</a></li>
-						<li><a href="przegladajBilans.php">Przeglądaj bilans</a></li>
+						<li><a href="home.php">Strona główna</a></li>
+						<li class="active"><a href="addIncome.php">Dodaj przychód</a></li>
+						<li><a href="addExpense.php">Dodaj wydatek</a></li>
+						<li><a href="viewBalance.php">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -226,7 +226,11 @@
 												echo $_SESSION['formDateIncome'];
 												unset($_SESSION['formDateIncome']);
 											}
-										?>" class="form-control" placeholder="dd-mm-rrrr" onfocus="this.placeholder=''" onblur="this.placeholder='dd-mm-rrrr">
+											else
+											{
+												echo date('Y-m-d'); 
+											}
+										?>" class="form-control">
 												<?php
 											if (isset($_SESSION['errorDateIncome']))
 											{

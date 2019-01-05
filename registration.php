@@ -120,7 +120,7 @@
 								if($connection->query("INSERT INTO payment_methods_assigned_to_users(user_id, name) SELECT u.id AS user_id, d.name FROM users AS u CROSS JOIN payment_methods_default AS d WHERE u.email='$email'"))
 								{
 									$_SESSION['successfulRegistration'] = true;
-								    header('Location: witamy.php');
+								    header('Location: welcome.php');
 								}
 								else
 								{
@@ -209,7 +209,7 @@
 					<div class="row text-center ">
 						<div class="col-md-4 col-md-offset-4 bg1">
 							<ul class="nav nav-pills nav-justified">
-								<li class="active"><a href="rejestracja.php"><h3>Rejestracja</h3>(Nie mam konta)</a></li>	
+								<li class="active"><a href="registration.php"><h3>Rejestracja</h3>(Nie mam konta)</a></li>	
 								<li class="noactive"><a href="index.php"><h3>Logowanie</h3>(Mam konto)</a></li>		
 							</ul>
 						</div>

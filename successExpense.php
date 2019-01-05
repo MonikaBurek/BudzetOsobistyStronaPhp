@@ -11,7 +11,7 @@
 	
 	if (!isset($_SESSION['successfulAddExpense']))
 	{
-		header('Location: stronaGlowna.php');
+		header('Location: home.php');
 		exit();
 	}
 	else
@@ -77,10 +77,10 @@
 				
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
-						<li><a href="stronaGlowna.php">Strona główna</a></li>
-						<li><a href="dodajPrzychod.php">Dodaj przychód</a></li>
-						<li class="active"><a href="dodajWydatek.php">Dodaj wydatek</a></li>
-						<li><a href="przegladajBilans.php">Przeglądaj bilans</a></li>
+						<li><a href="home.php">Strona główna</a></li>
+						<li><a href="addIncome.php">Dodaj przychód</a></li>
+						<li class="active"><a href="addExpense.php">Dodaj wydatek</a></li>
+						<li><a href="viewBalance.php">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -109,7 +109,7 @@
 							 Wydatek został zapisany!
 							<br /><br />
 	
-							<a href="dodajWydatek.php" class="btnSetting" role="button"> Dodaj kolejny wydatek!</a>
+							<a href="addExpense.php" class="btnSetting" role="button"> Dodaj kolejny wydatek!</a>
 							<br />								 
 						</div>
 						<div class="col-md-4"></div>

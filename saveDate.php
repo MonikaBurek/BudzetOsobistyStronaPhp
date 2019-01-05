@@ -66,7 +66,7 @@
 	
 		if ((isset($_SESSION['periodStartDate'])) && isset($_SESSION['periodEndDate']) && $allGood == true)
 		{
-			header ('Location: bilans.php');
+			header ('Location: balance.php');
 		}
 		
 		
@@ -115,10 +115,10 @@
 				
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
-						<li><a href="stronaGlowna.php">Strona główna</a></li>
-						<li><a href="dodajPrzychod.php">Dodaj przychód</a></li>
-						<li><a href="dodajWydatek.php">Dodaj wydatek</a></li>
-						<li class="active"><a href="przegladajBilans.php">Przeglądaj bilans</a></li>
+						<li><a href="home.php">Strona główna</a></li>
+						<li><a href="addIncome.php">Dodaj przychód</a></li>
+						<li><a href="addExpense.php">Dodaj wydatek</a></li>
+						<li class="active"><a href="viewBalance.php">Przeglądaj bilans</a></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ustawienia <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -206,7 +206,7 @@
 				}
 				else if ($_SESSION['formPeriodOfTime'] == "currentMonth" || $_SESSION['formPeriodOfTime'] == "previousMonth" || $_SESSION['formPeriodOfTime'] == "currentYear")
 				{ 
-					header ('Location: bilans.php');
+					header ('Location: balance.php');
 				}
 				
 				?>
